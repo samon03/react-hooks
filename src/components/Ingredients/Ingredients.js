@@ -9,10 +9,18 @@ const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
 
   const addHandler = (ingredient) => {
-     setUserIngredients(prevIngredients => [
-       ...prevIngredients, 
-       {id: Math.random().toString(), ...ingredient}
-      ]);
+    fetch('https://react-todolist-84877-default-rtdb.firebaseio.com/lists.json', {
+      method: 'POST',
+      body: JSON.stringify(ingredient),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(response => {
+        return response.json();
+    }).then(responseData => {
+      setUserIngredients(prevIngredients => [
+        ...prevIngredients, 
+        {id: responseData.name, ...ingredient}
+       ]);
+    });
   }
 
   return (
