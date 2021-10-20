@@ -13,7 +13,7 @@ const Ingredients = () => {
 
   // [] -> means componentDidMount
 
-  const addHandler = (ingredient) => {
+  const addHandler = useCallback((ingredient) => {
     setIsLoading(true);
     fetch('https://react-todolist-84877-default-rtdb.firebaseio.com/lists.json', {
       method: 'POST',
@@ -28,13 +28,13 @@ const Ingredients = () => {
         {id: responseData.name, ...ingredient}
        ]);
     });
-  }
+  });
 
   const onFilter = useCallback((filterIngredient) => {
     setUserIngredients(filterIngredient);
   }, []); 
 
-  const removeIngredientHandler = ingredientId => {
+  const removeIngredientHandler = useCallback(ingredientId => {
     setIsLoading(true);
     fetch(`https://react-todolist-84877-default-rtdb.firebaseio.com/lists/${ingredientId}.json`, {
       method: 'DELETE'
@@ -46,13 +46,13 @@ const Ingredients = () => {
       );
     }).catch(error => {
         setError(error.message);
-    });
-  }
+    }, []);
+  }, []);
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     setError(null);
     setIsLoading(false);
-  }
+  });
 
   return (
     <div className="App">
