@@ -10,7 +10,6 @@ const Ingredients = () => {
 
   // [] -> means componentDidMount
 
-
   const addHandler = (ingredient) => {
     fetch('https://react-todolist-84877-default-rtdb.firebaseio.com/lists.json', {
       method: 'POST',
@@ -30,6 +29,17 @@ const Ingredients = () => {
     setUserIngredients(filterIngredient);
   }, []); 
 
+  const removeIngredientHandler = ingredientId => {
+    fetch(`https://react-todolist-84877-default-rtdb.firebaseio.com/lists/${ingredientId}.json`, {
+      method: 'DELETE'
+    })
+    .then(response => {
+      setUserIngredients(prevIngredients =>
+        prevIngredients.filter(ingredient => ingredient.id !== ingredientId)
+      );
+    });
+  }
+
   return (
     <div className="App">
       <IngredientForm addIngredient={addHandler} />
@@ -37,7 +47,7 @@ const Ingredients = () => {
       <section>
         <Search onFilter={onFilter}/>
         <IngredientList ingredients={userIngredients} 
-             onRemoveItem={() => {}} />
+             onRemoveItem={removeIngredientHandler} />
       </section>
     </div>
   );
