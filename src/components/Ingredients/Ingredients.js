@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import IngredientForm from './IngredientForm';
 import Search from './Search';
@@ -7,6 +7,25 @@ import IngredientList from './IngredientList';
 const Ingredients = () => {
 
   const [userIngredients, setUserIngredients] = useState([]);
+
+  useEffect(() => {
+    fetch('https://react-todolist-84877-default-rtdb.firebaseio.com/lists.json')
+    .then(response => response.json())
+    .then(responseData => {
+        const loadData = [];
+        for (const key in responseData) {
+            loadData.push({
+              id: key,
+              title: responseData[key].title,
+              amount: responseData[key].amount
+        });
+      }
+      setUserIngredients(loadData);
+    });
+  }, []);
+
+  // [] -> means componentDidMount
+
 
   const addHandler = (ingredient) => {
     fetch('https://react-todolist-84877-default-rtdb.firebaseio.com/lists.json', {
